@@ -1,16 +1,16 @@
 #include <PinChangeInterrupt.h>
 
-const int TPIN_L = 11;
-const int EPIN_L = 12;
-const int TPIN_R = 2;
-const int EPIN_R = 3;
-const int TPIN_T = 4;
-const int EPIN_T = 5;
-const int TPIN_B = 8;
-const int EPIN_B = 9;
+const int TPIN_L = 6;
+const int EPIN_L = 7;
+const int TPIN_R = 4;
+const int EPIN_R = 5;
+const int TPIN_T = 9;
+const int EPIN_T = 8;
+const int TPIN_B = 10;
+const int EPIN_B = 11;
 
-const int LED_L = 6;
-const int LED_R = 7;
+const int LED_L = 12;
+const int LED_R = 13;
 
 const int THRESHOLD_NEAR = 17 ;
 const int THRESHOLD_FAR = 50;
@@ -235,6 +235,9 @@ void checkGesture(int dir, WaveState s1, WaveState s2) {
     if (dir == HORIZONTAL && gestureCountL < MAX_GC) {
       gestureCountL = MAX_GC;
       gestureCountR = MAX_GC;
+      digitalWrite(LED_L, HIGH);
+      delay(500);
+      digitalWrite(LED_L, LOW);
       Serial.print("왼쪽 화면으로 이동\n");
     } else if (dir == VERTICAL && gestureCountT < MAX_GC) {
       gestureCountT = MAX_GC;
@@ -245,6 +248,9 @@ void checkGesture(int dir, WaveState s1, WaveState s2) {
     if (dir == HORIZONTAL && gestureCountR < MAX_GC) {
       gestureCountL = MAX_GC;
       gestureCountR = MAX_GC;
+      digitalWrite(LED_R, HIGH);
+      delay(500);
+      digitalWrite(LED_R, LOW);
       Serial.print("오른쪽 화면으로 이동\n");
     } else if (dir == VERTICAL && gestureCountB < MAX_GC) {
       gestureCountT = MAX_GC;
@@ -282,5 +288,5 @@ void setup() {
 void loop() {
   getDistanceAndSetStates();
   checkGesture(HORIZONTAL, leftS, rightS);
-  checkGesture(VERTICAL, topS, bottomS);
+  //checkGesture(VERTICAL, topS, bottomS);
 }
