@@ -183,8 +183,14 @@ int getDistance(int TPIN, int echo_duration, int dir) {
     long distance = echo_duration / 58;
     if (dir == LEFT) echo_durationL = 0;
     else if (dir == RIGHT) echo_durationR = 0;
-    else if (dir == TOP) echo_durationT = 0;
-    else if (dir == BOTTOM) echo_durationB = 0;
+    else if (dir == TOP) {
+//      Serial.print(distance);
+//      Serial.print("\n");
+      echo_durationT = 0;
+    }
+    else if (dir == BOTTOM) {
+      echo_durationB = 0;
+    }
     return distance;
   }
   return -1;
@@ -309,7 +315,7 @@ bool isClose(WaveState bottomS){
       isOn = true;
       digitalWrite(LED_CLOSE, HIGH);
     }
-  } else if(isOn) {
+  } else if(bottomS.now == NOTHING && isOn) {
     Serial.print("화면 OFF!");
     Serial.print("\n");
     isOn = false;
