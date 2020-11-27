@@ -4,13 +4,16 @@ const int TPIN_L = 6;
 const int EPIN_L = 7;
 const int TPIN_R = 4;
 const int EPIN_R = 5;
-const int TPIN_T = 9;
-const int EPIN_T = 8;
-const int TPIN_B = 10;
-const int EPIN_B = 11;
+const int TPIN_T = 2;
+const int EPIN_T = 3;
+const int TPIN_B = 8;
+const int EPIN_B = 9;
 
 const int LED_L = 12;
 const int LED_R = 13;
+const int LED_T = 10;
+const int LED_B = 11;
+const int LED_CLOSE = 2;
 
 const int THRESHOLD_NEAR = 17 ;
 const int THRESHOLD_FAR = 50;
@@ -22,7 +25,7 @@ const int NEAR = 1;
 const int FAR = 2;
 const int NOTHING = 3;
 
-const int DISTANCE_NEAR = 10;
+const int DISTANCE_NEAR = 7;
 const int DISTANCE_FAR = 70;
 
 const int LEFT = 0;
@@ -46,6 +49,8 @@ int stateQL[QUEUE_SIZE];
 int stateQR[QUEUE_SIZE];
 int stateQT[QUEUE_SIZE];
 int stateQB[QUEUE_SIZE];
+
+bool isOn = false;
 
 int gestureCountL, gestureCountR, gestureCountT, gestureCountB = 0;
 typedef struct _WaveState {
@@ -242,6 +247,9 @@ void checkGesture(int dir, WaveState s1, WaveState s2) {
     } else if (dir == VERTICAL && gestureCountT < MAX_GC) {
       gestureCountT = MAX_GC;
       gestureCountB = MAX_GC;
+      digitalWrite(LED_T, HIGH);
+      delay(500);
+      digitalWrite(LED_T, LOW);
       Serial.print("위 화면으로 이동\n");
     }
   } else if (s1.now == NEAR) {
@@ -255,6 +263,9 @@ void checkGesture(int dir, WaveState s1, WaveState s2) {
     } else if (dir == VERTICAL && gestureCountB < MAX_GC) {
       gestureCountT = MAX_GC;
       gestureCountB = MAX_GC;
+      digitalWrite(LED_B, HIGH);
+      delay(500);
+      digitalWrite(LED_B, LOW);
       Serial.print("아래 화면으로 이동\n");
     }
   }
@@ -265,6 +276,19 @@ void checkGesture(int dir, WaveState s1, WaveState s2) {
     gestureCountT++;
     gestureCountB++;
   }
+}
+
+bool isClose(WaveState bottomS){
+  if (bottomS.now == FAR || bottomS.now == NEAR) {
+    if (!isOn) {
+      isOn = true;
+      digitalWrite(LED_CLOSE, HIGH);
+    }
+  } else if(isOn) {
+    isOn = false;
+    digitalWrite(LED_CLOSE, LOW);
+  }
+  return isOn;
 }
 
 void setup() {
@@ -278,6 +302,9 @@ void setup() {
   pinMode(EPIN_B, INPUT);
   pinMode(LED_L, OUTPUT);
   pinMode(LED_R, OUTPUT);
+  pinMode(LED_T, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+  pinMode(LED_CLOSE, OUTPUT);
   Serial.begin(115200);
   attachPCINT(digitalPinToPCINT(EPIN_L), echoISR_L, CHANGE);
   attachPCINT(digitalPinToPCINT(EPIN_R), echoISR_R, CHANGE);
@@ -287,6 +314,8 @@ void setup() {
 
 void loop() {
   getDistanceAndSetStates();
-  checkGesture(HORIZONTAL, leftS, rightS);
-  //checkGesture(VERTICAL, topS, bottomS);
+  if(isClose(bottomS)) {
+    checkGesture(HORIZONTAL, leftS, rightS);
+    checkGesture(VERTICAL, topS, bottomS);
+  }
 }

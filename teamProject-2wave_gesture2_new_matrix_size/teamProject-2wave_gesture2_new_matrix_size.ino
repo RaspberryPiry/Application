@@ -1,19 +1,22 @@
 #include <PinChangeInterrupt.h>
 
+const int TPIN_T = 2;
+const int EPIN_T = 3;
+const int TPIN_B = 4;
+const int EPIN_B = 5;
 const int TPIN_L = 6;
 const int EPIN_L = 7;
-const int TPIN_R = 4;
-const int EPIN_R = 5;
-const int TPIN_T = 9;
-const int EPIN_T = 8;
-const int TPIN_B = 10;
-const int EPIN_B = 11;
+const int TPIN_R = 8;
+const int EPIN_R = 9;
 
+const int LED_T = 10;
+const int LED_B = 11;
 const int LED_L = 12;
 const int LED_R = 13;
+const int LED_CLOSE = 1;
 
 const int THRESHOLD_NEAR = 25;
-const int THRESHOLD_FAR = 25   ;
+const int THRESHOLD_FAR = 25;
 const int THRESHOLD_NOTHING = 120;
 
 const int QUEUE_SIZE = 120;
@@ -22,7 +25,7 @@ const int NEAR = 1;
 const int FAR = 2;
 const int NOTHING = 3;
 
-const int DISTANCE_NEAR = 15;
+const int DISTANCE_NEAR = 10;
 const int DISTANCE_FAR = 70;
 
 const int LEFT = 0;
@@ -37,6 +40,8 @@ unsigned long echo_durationL = 0;
 unsigned long echo_durationR = 0;
 unsigned long echo_durationT = 0;
 unsigned long echo_durationB = 0;
+
+bool isOn = false;
 
 int stateLeft = 0;
 int stateRight = 0;
@@ -193,17 +198,17 @@ void getDistanceAndSetStates() {
   dR = getDistance(TPIN_R, echo_durationR, RIGHT);
   newState = checkDistanceAndGetState(dL, stateQL);
   if (newState > 0) {
-    Serial.print("왼쪽_");
-    Serial.print(newState);
-    Serial.print("\n");
+//    Serial.print("왼쪽_");
+//    Serial.print(newState);
+//    Serial.print("\n");
     leftS.prev = leftS.now;
     leftS.now = newState;
   }
   newState = checkDistanceAndGetState(dR, stateQR);
   if (newState > 0) {
-    Serial.print("오른쪽_");
-    Serial.print(newState);
-    Serial.print("\n");
+//    Serial.print("오른쪽_");
+//    Serial.print(newState);
+//    Serial.print("\n");
     rightS.prev = rightS.now;
     rightS.now = newState;
   }
@@ -212,11 +217,17 @@ void getDistanceAndSetStates() {
   dB = getDistance(TPIN_B, echo_durationB, BOTTOM);
   newState = checkDistanceAndGetState(dT, stateQT);
   if (newState > 0) {
+    //Serial.print("위_");
+    //Serial.print(newState);
+    //Serial.print("\n");
     topS.prev = topS.now;
     topS.now = newState;
   }
   newState = checkDistanceAndGetState(dB, stateQB);
   if (newState > 0 ) {
+    //Serial.print("아래_");
+    //Serial.print(newState);
+    //Serial.print("\n");
     bottomS.prev = bottomS.now;
     bottomS.now = newState;
   }
@@ -229,12 +240,14 @@ int checkGesture(int dir, WaveState s1, WaveState s2) {
       Serial.print("Left near->far clear\n");
     } else if (dir == VERTICAL && gestureCountT > MAX_GC * 4) {
       gestureCountT = 0;
+      Serial.print("Top near->far clear\n");
     }
   } else if (s2.prev == NEAR && s2.now == FAR) {
     if (dir == HORIZONTAL && gestureCountR > MAX_GC * 4) {
       Serial.print("Right near->far clear\n");
       gestureCountR = 0;
     } else if (dir == VERTICAL && gestureCountB > MAX_GC * 4) {
+      Serial.print("Bottom near->far clear\n");
       gestureCountB = 0;
     }
   }
@@ -252,6 +265,9 @@ int checkGesture(int dir, WaveState s1, WaveState s2) {
     } else if (dir == VERTICAL && gestureCountT < MAX_GC) {
       gestureCountT = MAX_GC;
       gestureCountB = MAX_GC;
+      digitalWrite(LED_T, HIGH);
+      delay(500);
+      digitalWrite(LED_T, LOW);
       Serial.print("위 화면으로 이동\n");
       return TOP;
     }
@@ -268,6 +284,9 @@ int checkGesture(int dir, WaveState s1, WaveState s2) {
     } else if (dir == VERTICAL && gestureCountB < MAX_GC) {
       gestureCountT = MAX_GC;
       gestureCountB = MAX_GC;
+      digitalWrite(LED_B, HIGH);
+      delay(500);
+      digitalWrite(LED_B, LOW);
       Serial.print("아래 화면으로 이동\n");
       return BOTTOM;
     }
@@ -282,6 +301,23 @@ int checkGesture(int dir, WaveState s1, WaveState s2) {
   return -1;
 }
 
+bool isClose(WaveState bottomS){
+  if (bottomS.now == FAR || bottomS.now == NEAR) {
+    if (!isOn) {
+      Serial.print("화면 ON!");
+      Serial.print("\n");
+      isOn = true;
+      digitalWrite(LED_CLOSE, HIGH);
+    }
+  } else if(isOn) {
+    Serial.print("화면 OFF!");
+    Serial.print("\n");
+    isOn = false;
+    digitalWrite(LED_CLOSE, LOW);
+  }
+  return isOn;
+}
+
 void setup() {
   pinMode(TPIN_L, OUTPUT);
   pinMode(EPIN_L, INPUT);
@@ -293,6 +329,9 @@ void setup() {
   pinMode(EPIN_B, INPUT);
   pinMode(LED_L, OUTPUT);
   pinMode(LED_R, OUTPUT);
+  pinMode(LED_T, OUTPUT);
+  pinMode(LED_B, OUTPUT);
+  pinMode(LED_CLOSE, OUTPUT);
   Serial.begin(115200);
   attachPCINT(digitalPinToPCINT(EPIN_L), echoISR_L, CHANGE);
   attachPCINT(digitalPinToPCINT(EPIN_R), echoISR_R, CHANGE);
@@ -302,9 +341,14 @@ void setup() {
 
 void loop() {
   getDistanceAndSetStates();
-  if (checkGesture(HORIZONTAL, leftS, rightS) >= 0) {
-    leftS.prev = 0; leftS.now = 0;
-    rightS.prev = 0; rightS.now = 0;
+  if (isClose(bottomS)) {
+    if (checkGesture(HORIZONTAL, leftS, rightS) >= 0) {
+      leftS.prev = 0; leftS.now = 0;
+      rightS.prev = 0; rightS.now = 0;
+    }
+    if (checkGesture(VERTICAL, topS, bottomS) >= 0) {
+      topS.prev = 0; topS.now = 0;
+      bottomS.prev = 0; bottomS.now = 0;
+    }
   }
-  //checkGesture(VERTICAL, topS, bottomS);
 }
