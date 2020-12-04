@@ -1,5 +1,6 @@
 package com.example.rasberrypiryapp
 
+import android.content.Context
 import android.graphics.PorterDuff
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,10 @@ class MainActivity : AppCompatActivity() {
         val sendBtn = findViewById<Button>(R.id.send_btn)
         val editText = findViewById<EditText>(R.id.text_edt)
         val colorDialog = ColorPickerDialog(this, R.color.black)
+        val name = getSharedPreferences("data", Context.MODE_PRIVATE).getString("Name", null)
+        name?.let {
+            editText.setText("$it- ");
+        }
 
         colorDialog.hexValueEnabled = false
         colorDialog.alphaSliderVisible = false
