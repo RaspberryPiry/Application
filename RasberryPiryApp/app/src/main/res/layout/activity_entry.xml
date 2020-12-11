@@ -21,17 +21,17 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/name_edt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
-        android:autofillHints="AUTOFILL_HINT_PERSON_NAME"
         android:hint="이름을 입력해주세요."
         android:inputType="text"
         android:textColor="@color/black"
-        android:textColorHint="@color/black"
+        android:backgroundTint="@color/black"
+        android:textColorHint="@color/gray"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/go_painting_btn"
         app:layout_constraintTop_toTopOf="parent" />

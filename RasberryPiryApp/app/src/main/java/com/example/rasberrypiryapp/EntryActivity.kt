@@ -8,8 +8,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -24,19 +23,28 @@ class EntryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_entry)
 
         val goPaint = findViewById<AppCompatButton>(R.id.go_painting_btn)
-        val name = findViewById<EditText>(R.id.name_edt)
+        val nameEdt = findViewById<EditText>(R.id.name_edt)
+        val nameTxt = findViewById<TextView>(R.id.name_txt)
         val pref = getSharedPreferences("data", Context.MODE_PRIVATE)
         val editor = pref.edit()
         val title = findViewById<TextView>(R.id.ripy_app)
+        val nameBtn = findViewById<ImageButton>(R.id.name_btn)
 
         val builder = SpannableStringBuilder("APP");
         builder.setSpan(ForegroundColorSpan(Color.parseColor("#FFA41B")), 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         title.append(builder);
-        goPaint.setOnClickListener {
-            startActivity(Intent(this, DrawingActivity::class.java))
-            editor.putString("Name", name.text.toString()).apply()
-        }
 
-        name.setText(pref.getString("Name", null))
+        nameBtn.setOnClickListener {
+            editor.putString("Name", nameEdt.text.toString()).apply()
+            nameTxt.text = nameEdt.text.toString()
+            nameEdt.text.clear()
+            Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
+        }
+        nameTxt.text = pref.getString("Name", null)
+
+        goPaint.setOnClickListener {
+            goPaint.isSelected = true
+            startActivity(Intent(this, DrawingActivity::class.java))
+        }
     }
 }
