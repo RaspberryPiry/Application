@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RasberryPiryApp"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PictureActivity"></activity>
         <activity android:name=".DrawingActivity" />
         <activity android:name=".EntryActivity">
             <intent-filter>
