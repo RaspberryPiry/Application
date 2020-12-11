@@ -71,6 +71,24 @@ class MyView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
         drawPath!!.reset()
     }
 
+    fun drawWithPixelData(pixelData: ArrayList<ArrayList<String>>) {
+        val w = width/matrixSize
+        drawPaint!!.strokeWidth = w.toFloat();
+        var x = 0
+        var y = 0
+        for (i in 0 until matrixSize) {
+            for (j in 0 until matrixSize) {
+                x = w * j + w/2
+                y = w * i + w/2
+                drawPaint!!.color = Color.parseColor("#FF" + pixelData[i][j])
+                drawPath!!.moveTo(x.toFloat(), y.toFloat())
+                drawPath!!.lineTo(x.toFloat(), y.toFloat())
+                drawCanvas!!.drawPath(drawPath!!, drawPaint!!)
+                drawPath!!.reset()
+            }
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         val newW = w.toDouble().roundToInt()
         super.onSizeChanged(newW, newW, oldw, oldh)
