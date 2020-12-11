@@ -214,7 +214,7 @@
         android:paddingTop="10dp"
         android:paddingRight="17dp"
         android:paddingBottom="10dp"
-        android:text="신나는"
+        android:text="급한"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintLeft_toRightOf="@id/alarm_btn1"
@@ -231,10 +231,9 @@
         android:paddingTop="10dp"
         android:paddingRight="17dp"
         android:paddingBottom="10dp"
-        android:text="신나는"
+        android:text="잔잔한"
         android:textColor="@color/white"
         android:textSize="18sp"
-        app:layout_constraintLeft_toRightOf="@id/alarm_btn2"
         app:layout_constraintRight_toRightOf="@id/drawView"
         app:layout_constraintTop_toBottomOf="@id/select_alarm_text" />
 
