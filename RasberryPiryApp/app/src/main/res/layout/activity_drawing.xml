@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".DrawingActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tool_layout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/radius_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/brush_layout"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="17dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/brush_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/brush_selector"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/brush_color_view"
+                android:layout_width="24dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/gray"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/brush_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/pen_layout"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            app:layout_constraintLeft_toRightOf="@id/brush_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/pen_btn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:background="@drawable/pen_selector"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/pen_color_view"
+                android:layout_width="24dp"
+                android:layout_height="4dp"
+                android:layout_marginTop="2dp"
+                android:background="@color/gray"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pen_btn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/erase_layout"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintLeft_toRightOf="@id/pen_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/erase_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/eraser_selector"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/color_layout"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintLeft_toRightOf="@id/erase_layout"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/color_btn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/ic_baseline_color_lens_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageButton
+            android:id="@+id/image_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="18dp"
+            android:background="@color/transparent"
+            android:src="@drawable/ic_baseline_collections_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.example.rasberrypiryapp.MyView
+        android:id="@+id/drawView"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tool_layout" />
+
+    <EditText
+        android:id="@+id/text_edt"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="38dp"
+        android:layout_marginTop="20dp"
+        android:hint="보낼 문구를 입력하세요."
+        android:inputType=""
+        android:lines="2"
+        android:maxLength="32"
+        android:textColor="#7a7a7a"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/drawView" />
+
+    <TextView
+        android:id="@+id/selected_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="현재 선택된 이름 : "
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/text_edt" />
+
+    <TextView
+        android:id="@+id/name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#004BA4"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/selected_txt"
+        app:layout_constraintTop_toTopOf="@id/selected_txt"
+        tools:text="최현준" />
+
+    <TextView
+        android:id="@+id/select_alarm_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="알람을 선택하세요."
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintLeft_toLeftOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/selected_txt" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/alarm_btn1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/radius_orange"
+        android:paddingLeft="17dp"
+        android:paddingTop="10dp"
+        android:paddingRight="17dp"
+        android:paddingBottom="10dp"
+        android:text="신나는"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/select_alarm_text" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/alarm_btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/radius_orange"
+        android:paddingLeft="17dp"
+        android:paddingTop="10dp"
+        android:paddingRight="17dp"
+        android:paddingBottom="10dp"
+        android:text="신나는"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@id/alarm_btn1"
+        app:layout_constraintRight_toLeftOf="@id/alarm_btn3"
+        app:layout_constraintTop_toBottomOf="@id/select_alarm_text" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/alarm_btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:background="@drawable/radius_orange"
+        android:paddingLeft="17dp"
+        android:paddingTop="10dp"
+        android:paddingRight="17dp"
+        android:paddingBottom="10dp"
+        android:text="신나는"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toRightOf="@id/alarm_btn2"
+        app:layout_constraintRight_toRightOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/select_alarm_text" />
+
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/send_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/radius_orange"
+        android:padding="9dp"
+        android:src="@drawable/ic_baseline_mail_outline_24"
+        android:text="보내기"
+        app:layout_constraintLeft_toLeftOf="@id/drawView"
+        app:layout_constraintRight_toRightOf="@id/drawView"
+        app:layout_constraintTop_toBottomOf="@id/alarm_btn1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

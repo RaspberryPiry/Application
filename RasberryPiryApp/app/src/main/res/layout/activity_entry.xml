@@ -4,18 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
+    android:background="@color/white"
     tools:context=".EntryActivity">
 
     <TextView
+        android:id="@+id/ripy_app"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="내 이름"
+        android:layout_marginBottom="90dp"
+        android:gravity="top"
+        android:text="RIPY "
         android:textColor="@color/black"
-        android:textSize="14sp"
+        android:textSize="48sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/name_edt"
-        app:layout_constraintLeft_toLeftOf="@id/name_edt" />
-
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <EditText
         android:id="@+id/name_edt"
@@ -28,34 +32,56 @@
         android:inputType="text"
         android:textColor="@color/black"
         android:textColorHint="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/go_painting_btn"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/go_painting_btn"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="20dp"
-        android:background="@color/black"
-        android:text="그림 그리기"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@id/go_picture_btn"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+    <ImageButton
+        android:id="@+id/name_btn"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/radius_orange"
+        android:src="@drawable/ic_baseline_check_24"
+        app:layout_constraintBottom_toBottomOf="@id/name_edt"
+        app:layout_constraintCircleRadius="60dp"
+        app:layout_constraintRight_toRightOf="@id/name_edt"
+        app:layout_constraintTop_toTopOf="@id/name_edt"
+        app:layout_goneMarginBottom="4dp" />
+
+    <TextView
+        android:id="@+id/selected_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="현재 선택된 이름 : "
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="@id/name_edt"
+        app:layout_constraintTop_toBottomOf="@id/name_edt" />
+
+    <TextView
+        android:id="@+id/name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="최현준"
+        android:textColor="#004BA4"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="@id/selected_txt"
         app:layout_constraintTop_toBottomOf="@id/name_edt" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/go_picture_btn"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="20dp"
-        android:background="@color/black"
-        android:text="사진 보내기"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+        android:id="@+id/go_painting_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:background="@color/transparent"
+        android:drawableRight="@drawable/ic_baseline_play_circle_outline_24"
+        android:drawablePadding="6dp"
+        android:text="그림 그리러 가기"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/go_painting_btn" />
+        app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
