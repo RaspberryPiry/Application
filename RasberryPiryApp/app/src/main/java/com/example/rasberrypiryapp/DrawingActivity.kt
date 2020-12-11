@@ -8,6 +8,8 @@ import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.esafirm.imagepicker.features.ImagePicker
@@ -49,12 +51,17 @@ class DrawingActivity : AppCompatActivity() {
 
         val pictureBtn = findViewById<ImageButton>(R.id.image_btn)
 
+        val a1 = findViewById<AppCompatButton>(R.id.alarm_btn1)
+        val a2 = findViewById<AppCompatButton>(R.id.alarm_btn2)
+        val a3 = findViewById<AppCompatButton>(R.id.alarm_btn3)
+
         val sendBtn = findViewById<AppCompatImageButton>(R.id.send_btn)
         val editText = findViewById<EditText>(R.id.text_edt)
+        val nameTxt = findViewById<TextView>(R.id.name_txt)
         val colorDialog = ColorPickerDialog(this, R.color.black)
         val name = getSharedPreferences("data", Context.MODE_PRIVATE).getString("Name", null)
         name?.let {
-            editText.setText("$it- ");
+            nameTxt.text = it
         }
 
         colorDialog.hexValueEnabled = false
@@ -78,6 +85,10 @@ class DrawingActivity : AppCompatActivity() {
             drawView.changeToBrush()
             changeTool(BRUSH, penBtn, brushBtn, eraseBtn)
         }
+
+        a1.setOnClickListener { changeAlarm(1, a1, a2, a3) }
+        a2.setOnClickListener { changeAlarm(2, a1, a2, a3) }
+        a3.setOnClickListener { changeAlarm(3, a1, a2, a3) }
 
         sendBtn.setOnClickListener {
             val content = drawView.getPixelString()
@@ -105,7 +116,6 @@ class DrawingActivity : AppCompatActivity() {
         pictureBtn.setOnClickListener {
             startActivityForResult(ImagePicker.create(this).getIntent(this), IpCons.RC_IMAGE_PICKER)
         }
-        startActivityForResult(ImagePicker.create(this).getIntent(this), IpCons.RC_IMAGE_PICKER)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -152,6 +162,44 @@ class DrawingActivity : AppCompatActivity() {
             }
             ERASER -> {
                 eraser.isSelected = true
+            }
+        }
+    }
+
+    private fun changeAlarm(selected : Int, a1: AppCompatButton, a2: AppCompatButton, a3: AppCompatButton) {
+        when (selected) {
+            1 -> {
+                if(a1.isSelected) {
+                    a1.isSelected = false
+                    a1.setTextColor(resources.getColor(R.color.orange))
+                } else {
+                    a1.isSelected = true
+                    a1.setTextColor(resources.getColor(R.color.black))
+                }
+                a2.isSelected = false
+                a3.isSelected = false
+            }
+            2 -> {
+                if(a2.isSelected) {
+                    a2.isSelected = false
+                    a2.setTextColor(resources.getColor(R.color.orange))
+                } else {
+                    a2.isSelected = true
+                    a2.setTextColor(resources.getColor(R.color.black))
+                }
+                a1.isSelected = false
+                a3.isSelected = false
+            }
+            3 -> {
+                if(a3.isSelected) {
+                    a3.isSelected = false
+                    a3.setTextColor(resources.getColor(R.color.orange))
+                } else {
+                    a3.isSelected = true
+                    a3.setTextColor(resources.getColor(R.color.black))
+                }
+                a1.isSelected = false
+                a2.isSelected = false
             }
         }
     }
