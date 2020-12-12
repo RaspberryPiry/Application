@@ -132,7 +132,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <com.example.rasberrypiryapp.MyView
+    <com.example.rasberrypiryapp.DrawView
         android:id="@+id/drawView"
         android:layout_width="match_parent"
         android:layout_height="280dp"

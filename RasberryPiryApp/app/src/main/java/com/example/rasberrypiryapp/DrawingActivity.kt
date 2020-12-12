@@ -28,13 +28,13 @@ val BRUSH = 1
 val ERASER = 2
 
 class DrawingActivity : AppCompatActivity() {
-    lateinit var drawView: MyView
+    lateinit var drawView: DrawView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_drawing)
 
-        drawView = findViewById<MyView>(R.id.drawView)
+        drawView = findViewById<DrawView>(R.id.drawView)
 
         val colorLayout = findViewById<ConstraintLayout>(R.id.color_layout)
         val colorBtn = findViewById<ImageView>(R.id.color_btn)

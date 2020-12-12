@@ -10,7 +10,7 @@ import androidx.core.graphics.ColorUtils
 import kotlin.math.roundToInt
 
 
-class MyView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
+class DrawView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
     private var drawPath: Path? = null
     private var drawPaint: Paint? = null
     private var canvasPaint: Paint? = null
