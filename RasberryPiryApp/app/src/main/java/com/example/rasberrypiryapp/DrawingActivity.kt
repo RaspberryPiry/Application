@@ -5,10 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +28,7 @@ class DrawingActivity : AppCompatActivity() {
     lateinit var drawView: DrawView
     lateinit var pColor: ImageView
     lateinit var bColor: ImageView
+    var melody: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,25 +90,12 @@ class DrawingActivity : AppCompatActivity() {
         a3.setOnClickListener { changeAlarm(3, a1, a2, a3) }
 
         sendBtn.setOnClickListener {
-            val content = drawView.getPixelString()
-            val item = UploadingObject(
-                editText.text.toString(),
-                Array(1, { 0 }),
-                0,
-                Array(1, { i -> content })
-            )
-            service.upload(item).enqueue(object : Callback<UploadResult> {
-                override fun onFailure(call: Call<UploadResult>?, t: Throwable?) {
-                    Log.d("error", t.toString())
-                }
-
-                override fun onResponse(
-                    call: Call<UploadResult>,
-                    response: Response<UploadResult>
-                ) {
-                    Log.d("Response :: ", response?.body().toString())
-                }
-            })
+            val text = nameTxt.text.toString() + " - " + editText.text.toString()
+            if (melody != null){
+                upload(text, melody)
+            } else {
+                upload(text)
+            }
         }
 
         drawView.changeColor(resources.getColor(R.color.white))
@@ -119,6 +104,24 @@ class DrawingActivity : AppCompatActivity() {
         pictureBtn.setOnClickListener {
             startActivityForResult(ImagePicker.create(this).getIntent(this), IpCons.RC_IMAGE_PICKER)
         }
+    }
+
+    private fun upload(text: String, melody: Int? = null) {
+        val content = drawView.getPixelString()
+        val item = if(melody != null) UploadingObject(text, Array(1) { 0 }, Array(1) { i -> content }, 1, melody )
+                    else UploadingObject(text, Array(1) { 0 }, Array(1) { _ -> content })
+
+        service.upload(item).enqueue(object : Callback<UploadResult> {
+            override fun onFailure(call: Call<UploadResult>?, t: Throwable?) {
+                Log.d("error", t.toString())
+                Toast.makeText(this@DrawingActivity, "전송에 실패하였습니다 - " + t.toString(), Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<UploadResult>, response: Response<UploadResult>) {
+                Log.d("Response :: ", response?.body().toString())
+                Toast.makeText(this@DrawingActivity, "전송되었습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -181,17 +184,28 @@ class DrawingActivity : AppCompatActivity() {
                 changeButtonSelected(a1, true)
                 changeButtonSelected(a2)
                 changeButtonSelected(a3)
+                changeMelody(1)
             }
             2 -> {
                 changeButtonSelected(a1)
                 changeButtonSelected(a2, true)
                 changeButtonSelected(a3)
+                changeMelody(2)
             }
             3 -> {
                 changeButtonSelected(a1)
                 changeButtonSelected(a2)
                 changeButtonSelected(a3, true)
+                changeMelody(3)
             }
+        }
+    }
+
+    private fun changeMelody(type: Int) {
+        if (melody == type) {
+            melody = null
+        } else {
+            melody = type
         }
     }
 
