@@ -178,38 +178,35 @@ class DrawingActivity : AppCompatActivity() {
     private fun changeAlarm(selected : Int, a1: AppCompatButton, a2: AppCompatButton, a3: AppCompatButton) {
         when (selected) {
             1 -> {
-                if(a1.isSelected) {
-                    a1.isSelected = false
-                    a1.setTextColor(resources.getColor(R.color.orange))
-                } else {
-                    a1.isSelected = true
-                    a1.setTextColor(resources.getColor(R.color.black))
-                }
-                a2.isSelected = false
-                a3.isSelected = false
+                changeButtonSelected(a1, true)
+                changeButtonSelected(a2)
+                changeButtonSelected(a3)
             }
             2 -> {
-                if(a2.isSelected) {
-                    a2.isSelected = false
-                    a2.setTextColor(resources.getColor(R.color.orange))
-                } else {
-                    a2.isSelected = true
-                    a2.setTextColor(resources.getColor(R.color.black))
-                }
-                a1.isSelected = false
-                a3.isSelected = false
+                changeButtonSelected(a1)
+                changeButtonSelected(a2, true)
+                changeButtonSelected(a3)
             }
             3 -> {
-                if(a3.isSelected) {
-                    a3.isSelected = false
-                    a3.setTextColor(resources.getColor(R.color.orange))
-                } else {
-                    a3.isSelected = true
-                    a3.setTextColor(resources.getColor(R.color.black))
-                }
-                a1.isSelected = false
-                a2.isSelected = false
+                changeButtonSelected(a1)
+                changeButtonSelected(a2)
+                changeButtonSelected(a3, true)
             }
+        }
+    }
+
+    private fun changeButtonSelected(a: AppCompatButton, isChanged: Boolean = false) {
+        if (isChanged) {
+            if (a.isSelected) {
+                a.isSelected = false
+                a.setTextColor(resources.getColor(R.color.orange))
+            } else {
+                a.isSelected = true
+                a.setTextColor(resources.getColor(R.color.black))
+            }
+        } else {
+            a.isSelected = false
+            a.setTextColor(resources.getColor(R.color.orange))
         }
     }
 }
