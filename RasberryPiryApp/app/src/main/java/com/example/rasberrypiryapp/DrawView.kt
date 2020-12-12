@@ -61,17 +61,17 @@ class DrawView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
 
     fun drawDot(width: Int, xPos: Float, yPos: Float) {
         val w = width/matrixSize
-        if(xPos - w < 0 || yPos - w < 0 || xPos + w > width || yPos + w > width) return
+        if(xPos - w/2 < 0 || yPos - w/2 < 0 || xPos + w/2 > width || yPos + w/2 > width) return
         drawPaint!!.strokeWidth = w.toFloat();
-        val x = (xPos / w).toDouble().roundToInt() * w
-        val y = (yPos / w).toDouble().roundToInt() * w
+        val x = (xPos / w).toInt() * w + w/2
+        val y = (yPos / w).toInt() * w + w/2
         drawPath!!.moveTo(x.toFloat(), y.toFloat())
         drawPath!!.lineTo(x.toFloat(), y.toFloat())
         drawCanvas!!.drawPath(drawPath!!, drawPaint!!)
         drawPath!!.reset()
     }
 
-    fun drawWithPixelData(pixelData: ArrayList<ArrayList<String>>) {
+    fun drawWithPixelData(pixelData: ArrayList<ArrayList<String>>): Int {
         val w = width/matrixSize
         drawPaint!!.strokeWidth = w.toFloat();
         var x = 0
@@ -87,6 +87,7 @@ class DrawView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
                 drawPath!!.reset()
             }
         }
+        return Color.parseColor("#FF" + pixelData[matrixSize - 1][matrixSize - 1])
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

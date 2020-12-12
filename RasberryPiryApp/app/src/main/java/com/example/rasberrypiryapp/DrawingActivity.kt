@@ -29,6 +29,8 @@ val ERASER = 2
 
 class DrawingActivity : AppCompatActivity() {
     lateinit var drawView: DrawView
+    lateinit var pColor: ImageView
+    lateinit var bColor: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,11 +45,11 @@ class DrawingActivity : AppCompatActivity() {
 
         val penLayout = findViewById<ConstraintLayout>(R.id.pen_layout)
         val penBtn = findViewById<ImageView>(R.id.pen_btn)
-        val pColor = findViewById<ImageView>(R.id.pen_color_view)
+        pColor = findViewById<ImageView>(R.id.pen_color_view)
 
         val brushLayout = findViewById<ConstraintLayout>(R.id.brush_layout)
         val brushBtn = findViewById<ImageView>(R.id.brush_btn)
-        val bColor = findViewById<ImageView>(R.id.brush_color_view)
+        bColor = findViewById<ImageView>(R.id.brush_color_view)
 
         val pictureBtn = findViewById<ImageButton>(R.id.image_btn)
 
@@ -68,8 +70,7 @@ class DrawingActivity : AppCompatActivity() {
         colorDialog.alphaSliderVisible = false
         colorDialog.setOnColorChangedListener {
             drawView.changeColor(it)
-            bColor.setBackgroundColor(it)
-            pColor.setBackgroundColor(it)
+            changeColorUi(it)
         }
         colorLayout.setOnClickListener { colorDialog.show() }
         eraseLayout.setOnClickListener {
@@ -138,8 +139,9 @@ class DrawingActivity : AppCompatActivity() {
                 ) {
                     response.body()?.pixel?.let {
                         drawView.post {
-                            drawView.drawWithPixelData(it)
+                            val c = drawView.drawWithPixelData(it)
                             drawView.invalidate()
+                            changeColorUi(c)
                         }
                     }
                     Log.d("wooni :: ", response?.body().toString())
@@ -147,6 +149,11 @@ class DrawingActivity : AppCompatActivity() {
             })
         }
         super.onActivityResult(requestCode, resultCode, data)
+    }
+
+    private fun changeColorUi(c: Int) {
+        bColor.setBackgroundColor(c)
+        pColor.setBackgroundColor(c)
     }
 
     private fun changeTool(tool: Int, pen: ImageView, brush: ImageView, eraser: ImageView) {
