@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.widget.AppCompatButton
 import retrofit2.Retrofit
@@ -39,10 +40,16 @@ class EntryActivity : AppCompatActivity() {
             nameTxt.text = nameEdt.text.toString()
             nameEdt.text.clear()
             Toast.makeText(this, "저장되었습니다.", Toast.LENGTH_LONG).show()
+            val imm: InputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager;
+            imm.hideSoftInputFromWindow(nameEdt.windowToken, 0);
         }
         nameTxt.text = pref.getString("Name", null)
 
         goPaint.setOnClickListener {
+            if (nameTxt.text == "") {
+                Toast.makeText(this, "이름을 입력해 주세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             goPaint.isSelected = true
             startActivity(Intent(this, DrawingActivity::class.java))
         }

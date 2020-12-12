@@ -238,7 +238,7 @@ class DrawingActivity : AppCompatActivity() {
                 a.setTextColor(resources.getColor(R.color.orange))
             } else {
                 a.isSelected = true
-                a.setTextColor(resources.getColor(R.color.black))
+                a.setTextColor(resources.getColor(R.color.white))
             }
         } else {
             a.isSelected = false
