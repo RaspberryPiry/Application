@@ -114,8 +114,8 @@ class DrawingActivity : AppCompatActivity() {
 
     private fun upload(text: String, melody: Int? = null) {
         val content = drawView.getPixelString()
-        val item = if(melody != null) UploadingObject(text, Array(1) { 0 }, Array(1) { i -> content }, 1, melody )
-                    else UploadingObject(text, Array(1) { 0 }, Array(1) { _ -> content })
+        val item = if(melody != null) UploadingObject(text, Array(1) { 1000 }, Array(1) { i -> content }, 1, melody )
+                    else UploadingObject(text, Array(1) { 1000 }, Array(1) { _ -> content })
 
         service.upload(item).enqueue(object : Callback<UploadResult> {
             override fun onFailure(call: Call<UploadResult>?, t: Throwable?) {
