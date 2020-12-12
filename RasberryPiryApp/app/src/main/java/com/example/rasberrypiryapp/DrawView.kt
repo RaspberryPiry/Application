@@ -125,10 +125,10 @@ class DrawView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
         val w = width / matrixSize
         for(i in 0 until matrixSize) {
             for (j in 0 until matrixSize) {
-                input = canvasBitmap!!.getPixel(i * w, j * w)
+                input = canvasBitmap!!.getPixel(i * w + w/2, j * w + w/2)
                 result += java.lang.String.format("%02x%02x%02x", Color.red(input), Color.green(input), Color.blue(input))
                 result += " "
-                if(++enterCount % 16 == 0) result += "\n"
+                if(++enterCount % matrixSize == 0) result += "\n"
             }
         }
         return result
