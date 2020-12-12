@@ -2,10 +2,11 @@ package com.example.rasberrypiryapp
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -20,6 +21,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
+
 val PEN = 0
 val BRUSH = 1
 val ERASER = 2
@@ -28,6 +30,10 @@ class DrawingActivity : AppCompatActivity() {
     lateinit var drawView: DrawView
     lateinit var pColor: ImageView
     lateinit var bColor: ImageView
+    lateinit var editText: EditText
+    lateinit var a1: AppCompatButton
+    lateinit var a2: AppCompatButton
+    lateinit var a3: AppCompatButton
     var melody: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +57,12 @@ class DrawingActivity : AppCompatActivity() {
 
         val pictureBtn = findViewById<ImageButton>(R.id.image_btn)
 
-        val a1 = findViewById<AppCompatButton>(R.id.alarm_btn1)
-        val a2 = findViewById<AppCompatButton>(R.id.alarm_btn2)
-        val a3 = findViewById<AppCompatButton>(R.id.alarm_btn3)
+        a1 = findViewById<AppCompatButton>(R.id.alarm_btn1)
+        a2 = findViewById<AppCompatButton>(R.id.alarm_btn2)
+        a3 = findViewById<AppCompatButton>(R.id.alarm_btn3)
 
         val sendBtn = findViewById<AppCompatImageButton>(R.id.send_btn)
-        val editText = findViewById<EditText>(R.id.text_edt)
+        editText = findViewById<EditText>(R.id.text_edt)
         val nameTxt = findViewById<TextView>(R.id.name_txt)
         val colorDialog = ColorPickerDialog(this, R.color.black)
         val name = getSharedPreferences("data", Context.MODE_PRIVATE).getString("Name", null)
@@ -85,16 +91,16 @@ class DrawingActivity : AppCompatActivity() {
             changeTool(BRUSH, penBtn, brushBtn, eraseBtn)
         }
 
-        a1.setOnClickListener { changeAlarm(1, a1, a2, a3) }
-        a2.setOnClickListener { changeAlarm(2, a1, a2, a3) }
-        a3.setOnClickListener { changeAlarm(3, a1, a2, a3) }
+        a1.setOnClickListener { changeAlarm(1) }
+        a2.setOnClickListener { changeAlarm(2) }
+        a3.setOnClickListener { changeAlarm(3) }
 
         sendBtn.setOnClickListener {
             val text = nameTxt.text.toString() + " - " + editText.text.toString()
             if (melody != null){
-                upload(text, melody)
+                showUploadAlert(text, melody)
             } else {
-                upload(text)
+                showUploadAlert(text)
             }
         }
 
@@ -120,8 +126,23 @@ class DrawingActivity : AppCompatActivity() {
             override fun onResponse(call: Call<UploadResult>, response: Response<UploadResult>) {
                 Log.d("Response :: ", response?.body().toString())
                 Toast.makeText(this@DrawingActivity, "전송되었습니다.", Toast.LENGTH_SHORT).show()
+                drawView.clear()
+                editText.setText("")
+                changeButtonSelected(a1)
+                changeButtonSelected(a2)
+                changeButtonSelected(a3)
             }
         })
+    }
+
+    private fun showUploadAlert(text: String, melody: Int? = null) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("전송하시겠습니까?")
+        builder.setPositiveButton("예") { dialog, which ->
+            upload(text, melody)
+        }
+        builder.setNegativeButton("아니오") { dialog, which -> }
+        builder.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -132,6 +153,7 @@ class DrawingActivity : AppCompatActivity() {
                 RequestBody.create(MediaType.parse("multipart/form-data"), file)
             val body =
                 MultipartBody.Part.createFormData("img", file.getName(), requestFile)
+            Toast.makeText(this, "변환 중 입니다...", Toast.LENGTH_LONG).show()
             service.uploadImage(body).enqueue(object : Callback<UploadImagePixelfyResult> {
                 override fun onFailure(call: Call<UploadImagePixelfyResult>?, t: Throwable?) {
 
@@ -178,7 +200,7 @@ class DrawingActivity : AppCompatActivity() {
         }
     }
 
-    private fun changeAlarm(selected : Int, a1: AppCompatButton, a2: AppCompatButton, a3: AppCompatButton) {
+    private fun changeAlarm(selected : Int) {
         when (selected) {
             1 -> {
                 changeButtonSelected(a1, true)
@@ -202,10 +224,10 @@ class DrawingActivity : AppCompatActivity() {
     }
 
     private fun changeMelody(type: Int) {
-        if (melody == type) {
-            melody = null
+        melody = if (melody == type) {
+            null
         } else {
-            melody = type
+            type
         }
     }
 

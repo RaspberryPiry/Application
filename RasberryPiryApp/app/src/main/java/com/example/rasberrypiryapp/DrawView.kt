@@ -137,4 +137,9 @@ class DrawView(context: Context?, attrs: AttributeSet) : View(context, attrs) {
     init {
         setupDrawing()
     }
+
+    fun clear() {
+        drawCanvas?.drawColor(Color.BLACK)
+        invalidate()
+    }
 }
