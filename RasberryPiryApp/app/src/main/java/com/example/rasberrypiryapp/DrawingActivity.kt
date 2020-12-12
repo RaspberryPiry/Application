@@ -113,6 +113,8 @@ class DrawingActivity : AppCompatActivity() {
             })
         }
 
+        drawView.changeColor(resources.getColor(R.color.white))
+        changeColorUi(resources.getColor(R.color.white))
         penLayout.performClick()
         pictureBtn.setOnClickListener {
             startActivityForResult(ImagePicker.create(this).getIntent(this), IpCons.RC_IMAGE_PICKER)
